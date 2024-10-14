@@ -190,14 +190,20 @@ type UnbindSpec struct {
 }
 
 type Binding struct {
-	IsAsync         bool          `json:"is_async"`
-	AlreadyExists   bool          `json:"already_exists"`
-	OperationData   string        `json:"operation_data"`
-	Credentials     interface{}   `json:"credentials"`
-	SyslogDrainURL  string        `json:"syslog_drain_url"`
-	RouteServiceURL string        `json:"route_service_url"`
-	BackupAgentURL  string        `json:"backup_agent_url,omitempty"`
-	VolumeMounts    []VolumeMount `json:"volume_mounts"`
+	IsAsync         bool            `json:"is_async"`
+	AlreadyExists   bool            `json:"already_exists"`
+	OperationData   string          `json:"operation_data"`
+	Credentials     interface{}     `json:"credentials"`
+	SyslogDrainURL  string          `json:"syslog_drain_url"`
+	RouteServiceURL string          `json:"route_service_url"`
+	BackupAgentURL  string          `json:"backup_agent_url,omitempty"`
+	VolumeMounts    []VolumeMount   `json:"volume_mounts"`
+	Metadata        BindingMetadata `json:"metadata,omitempty"`
+}
+
+type BindingMetadata struct {
+	ExpiresAt   string `json:"expires_at,omitempty"`
+	RenewBefore string `json:"renew_before,omitempty"`
 }
 
 type GetBindingSpec struct {
@@ -206,6 +212,7 @@ type GetBindingSpec struct {
 	RouteServiceURL string
 	VolumeMounts    []VolumeMount
 	Parameters      interface{}
+	Metadata        BindingMetadata
 }
 
 func (d ProvisionDetails) GetRawContext() json.RawMessage {
@@ -226,6 +233,10 @@ func (d BindDetails) GetRawParameters() json.RawMessage {
 
 func (m InstanceMetadata) IsEmpty() bool {
 	return len(m.Attributes) == 0 && len(m.Labels) == 0
+}
+
+func (m BindingMetadata) IsEmpty() bool {
+	return len(m.ExpiresAt) == 0 && len(m.RenewBefore) == 0
 }
 
 func (d UpdateDetails) GetRawContext() json.RawMessage {

@@ -57,12 +57,18 @@ func (h APIHandler) GetBinding(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	var metadata any
+	if !binding.Metadata.IsEmpty() {
+		metadata = binding.Metadata
+	}
+
 	h.respond(w, http.StatusOK, requestId, apiresponses.GetBindingResponse{
 		BindingResponse: apiresponses.BindingResponse{
 			Credentials:     binding.Credentials,
 			SyslogDrainURL:  binding.SyslogDrainURL,
 			RouteServiceURL: binding.RouteServiceURL,
 			VolumeMounts:    binding.VolumeMounts,
+			Metadata:        metadata,
 		},
 		Parameters: binding.Parameters,
 	})

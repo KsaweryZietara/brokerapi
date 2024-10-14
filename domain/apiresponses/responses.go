@@ -67,6 +67,7 @@ type BindingResponse struct {
 	RouteServiceURL string               `json:"route_service_url,omitempty"`
 	VolumeMounts    []domain.VolumeMount `json:"volume_mounts,omitempty"`
 	BackupAgentURL  string               `json:"backup_agent_url,omitempty"`
+	Metadata        any                  `json:"metadata,omitempty"`
 }
 
 type GetBindingResponse struct {
